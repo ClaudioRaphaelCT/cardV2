@@ -11,7 +11,9 @@
     </v-container>
     <footer>
       <div id="total">
-        <h3 class="text-center">Valor total do Cartão: R$ {{ total }}</h3>
+        <h3 class="text-center">
+          Valor total do Cartão: R$ {{ total.toFixed(2) }}
+        </h3>
       </div>
     </footer>
   </v-app>
