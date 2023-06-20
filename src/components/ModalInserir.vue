@@ -12,18 +12,19 @@
         <v-divider></v-divider>
         <v-card-text>
           <v-select
-            label="label"
+            label="Responsavel"
             :items="persons"
             v-model="newItem.name"
             autocomplete
           ></v-select>
           <v-text-field
             v-model="newItem.data"
-            label="Data"
+            label="Data: ##/##/####"
             v-mask="'##/##/####'"
           ></v-text-field>
           <v-text-field v-model="newItem.local" label="Local"></v-text-field>
           <v-text-field
+            type="number"
             v-model.number="newItem.valor"
             label="Valor"
           ></v-text-field>
@@ -37,7 +38,7 @@
 </template>
 
 <script>
-import db from "../services/conn";
+import { MixinInserir } from "../utils/MixinInserir";
 export default {
   name: "ModalInserir",
   data() {
@@ -52,43 +53,7 @@ export default {
       },
     };
   },
-
-  mounted() {},
-
-  methods: {
-    async addItem() {
-      if (this.newItem.name == "Rhaíssa") {
-        await db.collection("cartaoRhai").doc().set(this.newItem);
-        this.newItem = {
-          data: "",
-          local: "",
-          valor: 0,
-        };
-        alert(`Cadastro Realizado para : Rhaíssa`);
-        location.reload();
-      } else if (this.newItem.name == "Raphael") {
-        await db.collection("cartaoRapha").add(this.newItem);
-        this.newItem = {
-          data: "",
-          local: "",
-          valor: 0,
-        };
-        alert(`Cadastro Realizado para : Rapha`);
-        location.reload();
-      } else if (this.newItem.name == "Ambos") {
-        await db.collection("cartaoAmbos").add(this.newItem);
-        this.newItem = {
-          data: "",
-          local: "",
-          valor: 0,
-        };
-        alert(`Cadastro Realizado para : Rapha & Rhaí`);
-        location.reload();
-      } else {
-        alert("ERRO: Campos não preenchidos corretamente");
-      }
-    },
-  },
+  mixins: [MixinInserir],
 };
 </script>
 
