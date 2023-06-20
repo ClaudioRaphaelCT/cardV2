@@ -8,6 +8,7 @@
       <ModalInserir></ModalInserir>
       <ModalRhai class="mr-3 ml-3"></ModalRhai>
       <ModalRapha></ModalRapha>
+      <ModalAmbos class="ml-3"></ModalAmbos>
     </v-container>
     <footer>
       <div id="total">
@@ -23,68 +24,39 @@
 import ModalRhai from "./components/ModalRhai.vue";
 import ModalRapha from "./components/ModalRapha.vue";
 import ModalInserir from "./components/ModalInserir.vue";
-import db from "./services/conn";
+import ModalAmbos from "./components/ModalAmbos.vue";
+import { MixinApp } from "./utils/MixinApp";
+
 export default {
   name: "App",
   components: {
     ModalRhai,
     ModalInserir,
     ModalRapha,
+    ModalAmbos,
   },
   data() {
     return {
       cartaoRhai: [],
       cartaoRapha: [],
+      cartaoAmbos: [],
       valorTotalRhai: 0,
       valorTotalRapha: 0,
+      valorTotalAmbos: 0,
       total: 0,
     };
   },
+  mixins: [MixinApp],
 
   async created() {
     this.cartaoRhai = await this.getDataRhai();
     this.valorTotalRhai = await this.getTotalRhai();
+    this.cartaoAmbos = await this.getDataAmbos();
+    this.valorTotalAmbos = await this.getTotalAmbos();
     this.cartaoRapha = await this.getDataRapha();
     this.valorTotalRapha = await this.getTotalRapha();
-    this.total = this.valorTotalRapha + this.valorTotalRhai;
-  },
-
-  methods: {
-    async getDataRhai() {
-      const snapshot = await db
-        .collection("cartaoRhai")
-        .orderBy("data", "asc")
-        .get();
-      return snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-    },
-
-    async getTotalRhai() {
-      const sum = await this.cartaoRhai.reduce(
-        (total, item) => total + item.valor,
-        0
-      );
-      return sum;
-    },
-    async getDataRapha() {
-      const snapshot = await db
-        .collection("cartaoRapha")
-        .orderBy("data", "asc")
-        .get();
-      return snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-    },
-    async getTotalRapha() {
-      const sum = await this.cartaoRapha.reduce(
-        (total, item) => total + item.valor,
-        0
-      );
-      return sum;
-    },
+    this.total =
+      this.valorTotalRapha + this.valorTotalRhai + this.valorTotalAmbos;
   },
 };
 </script>

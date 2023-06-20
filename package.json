@@ -13,6 +13,7 @@
     "firebase": "8.10.1",
     "roboto-fontface": "*",
     "vue": "^3.2.47",
+    "vue-the-mask": "^0.11.1",
     "vuetify": "npm:@vuetify/nightly@next",
     "webfontloader": "^1.0.0"
   },

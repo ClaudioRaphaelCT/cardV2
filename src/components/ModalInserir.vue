@@ -11,12 +11,17 @@
         </v-card-title>
         <v-divider></v-divider>
         <v-card-text>
-          <v-text-field
+          <v-select
+            label="label"
+            :items="persons"
             v-model="newItem.name"
-            label="Responsavel"
-            id="id"
+            autocomplete
+          ></v-select>
+          <v-text-field
+            v-model="newItem.data"
+            label="Data"
+            v-mask="'##/##/####'"
           ></v-text-field>
-          <v-text-field v-model="newItem.data" label="Data"></v-text-field>
           <v-text-field v-model="newItem.local" label="Local"></v-text-field>
           <v-text-field
             v-model.number="newItem.valor"
@@ -37,6 +42,7 @@ export default {
   name: "ModalInserir",
   data() {
     return {
+      persons: ["Raphael", "Rhaíssa", "Ambos"],
       cadastrar: false,
       newItem: {
         name: "",
@@ -51,26 +57,32 @@ export default {
 
   methods: {
     async addItem() {
-      if (this.newItem.name == "Rhai" || this.newItem.name == "Rhaissa") {
+      if (this.newItem.name == "Rhaíssa") {
         await db.collection("cartaoRhai").doc().set(this.newItem);
         this.newItem = {
           data: "",
           local: "",
           valor: 0,
         };
-        alert(`Cadastro Realizado para : Rhaissa!`);
+        alert(`Cadastro Realizado para : Rhaíssa`);
         location.reload();
-      } else if (
-        this.newItem.name == "Rapha" ||
-        this.newItem.name == "Raphael"
-      ) {
+      } else if (this.newItem.name == "Raphael") {
         await db.collection("cartaoRapha").add(this.newItem);
         this.newItem = {
           data: "",
           local: "",
           valor: 0,
         };
-        alert(`Cadastro Realizado para : Rapha!`);
+        alert(`Cadastro Realizado para : Rapha`);
+        location.reload();
+      } else if (this.newItem.name == "Ambos") {
+        await db.collection("cartaoAmbos").add(this.newItem);
+        this.newItem = {
+          data: "",
+          local: "",
+          valor: 0,
+        };
+        alert(`Cadastro Realizado para : Rapha & Rhaí`);
         location.reload();
       } else {
         alert("ERRO: Campos não preenchidos corretamente");

@@ -2,11 +2,13 @@
   <div class="text-center">
     <v-dialog v-model="dialog" width="auto">
       <template v-slot:activator="{ props }">
-        <v-btn color="purple-darken-1" v-bind="props">Rhai</v-btn>
+        <v-btn color="orange-darken-4" v-bind="props">Ambos</v-btn>
       </template>
 
-      <v-card color="purple-accent-4">
-        <v-card-title primary-title class="text-center"> Rhai </v-card-title>
+      <v-card color="orange-darken-4">
+        <v-card-title primary-title class="text-center">
+          Rapha & Rhaí
+        </v-card-title>
         <v-divider></v-divider>
         <v-card-text>
           <v-table>
@@ -19,7 +21,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(user, indice) in cartao" :key="indice">
+              <tr v-for="(user, indice) in cartaoAmbos" :key="indice">
                 <td>{{ user.data }}</td>
                 <td>{{ user.local }}</td>
                 <td>R$ {{ user.valor }}</td>
@@ -35,9 +37,7 @@
               </tr>
             </tbody>
           </v-table>
-          <h3 class="text-center mt-2">
-            Total: {{ vlrCalculateRhai.toFixed(2) }}
-          </h3>
+          <h3 class="text-center mt-2">Total: {{ vlrAmbos.toFixed(2) }}</h3>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -45,30 +45,22 @@
 </template>
 
 <script>
-import { MixinRhai } from "../utils/MixinRhai";
+import { MixinAmbos } from "../utils/MixinAmbos";
 
 export default {
-  name: "ModalRhai",
+  name: "ModalAmbos",
 
   data() {
     return {
       dialog: false,
-      cartao: [],
       cartaoAmbos: [],
-      vlrTotal: 0,
       vlrAmbos: 0,
-      vlrCalculateRhai: 0,
     };
   },
-
-  mixins: [MixinRhai],
-
+  mixins: [MixinAmbos],
   async created() {
-    this.cartao = await this.getData();
     this.cartaoAmbos = await this.getDataAmbos();
-    this.vlrTotal = await this.getTotal();
     this.vlrAmbos = await this.getTotalAmbos();
-    this.vlrCalculateRhai = this.vlrTotal + this.vlrAmbos;
   },
 };
 </script>

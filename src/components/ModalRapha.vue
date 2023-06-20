@@ -35,7 +35,9 @@
               </tr>
             </tbody>
           </v-table>
-          <h3 class="text-center mt-2">Total: {{ vlrTotal.toFixed(2) }}</h3>
+          <h3 class="text-center mt-2">
+            Total: {{ vlrCalculateRapha.toFixed(2) }}
+          </h3>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -43,7 +45,7 @@
 </template>
 
 <script>
-import db from "../services/conn";
+import { MixinRapha } from "../utils/MixinRapha";
 
 export default {
   name: "ModalRapha",
@@ -52,41 +54,21 @@ export default {
     return {
       dialog: false,
       cartao: [],
+      cartaoAmbos: [],
       vlrTotal: 0,
+      vlrAmbos: 0,
+      vlrCalculateRapha: 0,
     };
   },
 
+  mixins: [MixinRapha],
+
   async created() {
     this.cartao = await this.getData();
+    this.cartaoAmbos = await this.getDataAmbos();
     this.vlrTotal = await this.getTotal();
-  },
-
-  methods: {
-    async getData() {
-      const snapshot = await db
-        .collection("cartaoRapha")
-        .orderBy("data", "asc")
-        .get();
-      return snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-    },
-    async getTotal() {
-      const sum = await this.cartao.reduce(
-        (total, item) => total + item.valor,
-        0
-      );
-      return sum;
-    },
-    async deleteItem(itemId) {
-      if (confirm("Tem certeza que deseja excluir esse item?")) {
-        await db.collection("cartaoRapha").doc(itemId).delete();
-        this.cartao = await this.getData();
-        this.vlrTotal = await this.getTotal();
-        location.reload();
-      }
-    },
+    this.vlrAmbos = await this.getTotalAmbos();
+    this.vlrCalculateRapha = this.vlrTotal + this.vlrAmbos;
   },
 };
 </script>
